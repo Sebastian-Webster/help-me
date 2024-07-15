@@ -1,0 +1,40 @@
+main {
+    width: 100dvw;
+    height: 100dvh;
+}
+
+.centred-column-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+#role-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+}
+
+.role-item {
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.full-screen {
+    height: 100dvh;
+    width: 100dvw;
+}
+
+i {
+    font-size: 30pt;
+}
+
+#role-container h1 {
+    margin: 0px;
+    padding: 0px;
+}

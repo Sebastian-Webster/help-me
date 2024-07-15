@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Help Me</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="fontawesome.min.css">
+</head>
+<body>
+    <template id="error-getting-socket-code-template">
+        <div class="full-screen centred-column-list" style="background-color: red;">
+            <h1>An error occurred while getting socket.io code. Possibly a connection to the server could not be made?</h1>
+            <h1>Please refresh the page</h1>
+        </div>
+    </template>
+    
+    <template id="welcome-screen-template">
+        <div class="full-screen centred-column-list">
+            <h1>Hello! Are you a</h1>
+            <div id="role-container">
+                <div class="role-item centred-column-list" onclick="changeRole('trainer')">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <h1>Trainer</h1>
+                </div>
+                <h3>OR</h3>
+                <div class="role-item centred-column-list" onclick="changeRole('student')">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <h1>Student</h1>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="enter-name-template">
+        <div class="full-screen centred-column-list">
+            <h1>What is your name?</h1>
+            <form onsubmit="setName(event)">
+                <label for="name">Name:</label>
+                <input type="text" placeholder="John Smith" name="name" id="name">
+                <br>
+                <input type="submit">
+            </form>
+        </div>
+    </template>
+    
+    <main><h1 style="text-align: center;">Loading...</h1></main>
+</body>
+<script type="module" src="client.js"></script>
+</html>

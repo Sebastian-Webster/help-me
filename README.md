@@ -10,3 +10,5 @@ The students will be able to see who is getting help at the moment and what thei
 For classes with more than one trainer, this website will maximise the usage of trainers' time.
 Since the students that need help will be put in a queue, when a trainer becomes available they can instantly help the next student and know who needs help
 This maximises use of trainer time and minimises time waiting for help
+
+Project uses FontAwesome v6.5.2

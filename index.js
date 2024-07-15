@@ -1,6 +1,8 @@
 const http = require('http')
+const express = require('express')
+const app = express();
 const {Server} = require('socket.io');
-const server = http.createServer()
+const server = http.createServer(app)
 const io = new Server(server)
 
 const serverState = {
@@ -62,6 +64,8 @@ io.on('connection', socket => {
         }
     })
 })
+
+app.use(express.static('public'))
 
 server.listen(3000, () => {
     console.log('Listening on port 3000')
