@@ -13,11 +13,13 @@ const serverState = {
 }
 
 io.on('connection', socket => {
+    console.log('Somebody connected to the socket')
     serverState.connections[socket.id] = {socket}
 
     socket.on('disconnect', () => {
+        const name = serverState.connections[socket.id].name
         delete serverState.connections[socket.id]
-        serverState.helpQueue = serverState.helpQueue.filter()
+        serverState.helpQueue = serverState.helpQueue.filter(item => item === name)
     })
 
     socket.on('entered name and role', (userData => {
@@ -46,7 +48,7 @@ io.on('connection', socket => {
     socket.on('no longer need help', () => {
         const user = serverState.connections[socket.id]
         if (user.role === 'student') {
-            serverState.helpQueue.filter(student => student.name !== user.name)
+            serverState.helpQueue.filter(student => student !== user.name)
         }
     })
 
