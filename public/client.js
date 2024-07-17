@@ -8,6 +8,28 @@ try {
 
 const socket = io()
 const protocolVersion = 1;
+let disconnected = false;
+
+socket.on('disconnect', () => {
+    handleInvalidConnection()
+})
+
+socket.on('connect_error', () => {
+    handleInvalidConnection()
+})
+
+socket.on('connect', () => {
+    if (disconnected) {
+        disconnected = false
+        socket.emit('request protocol version', (response) => {
+            if (response === protocolVersion) {
+                document.getElementById('disconnected-screen').classList.add('hidden')
+            } else {
+                handleInvalidProtocolVersion(response)
+            }
+        })
+    }
+})
 
 socket.on('name error', () => {
     document.getElementById('name-error').classList.remove('hidden')
@@ -54,7 +76,14 @@ function handleClientStateChange(state) {
 }
 
 function handleInvalidProtocolVersion(version) {
+    document.getElementById('incorrect-protocol-version').classList.remove('hidden')
+    document.getElementById('supported-protocol-version').textContent = protocolVersion
+    document.getElementById('server-protocol-version').textContent = version
+}
 
+function handleInvalidConnection() {
+    document.getElementById('disconnected-screen').classList.remove('hidden')
+    disconnected = true;
 }
 
 function changeRole(newRole) {

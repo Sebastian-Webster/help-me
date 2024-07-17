@@ -3,6 +3,11 @@ main {
     height: 100dvh;
 }
 
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
 noscript {
     height: 100dvh;
     width: 100dvw;
@@ -62,4 +67,30 @@ i {
     background-color: rgba(255, 9, 9, 0.5);
     border: 1px solid black;
     border-radius: 10px;
+}
+
+.cover-screen {
+    position: absolute;
+    width: 100dvw;
+    height: 100dvh;
+    top: 0px;
+    left: 0px;
+    background-color: white;
+}
+
+.animated-ellipsis::after {
+    content: '.';
+    animation: animated-ellipsis 1s infinite;
+}
+
+@keyframes animated-ellipsis {
+    33% {
+        content: '..'
+    }
+    66% {
+        content: '...'
+    }
+    100% {
+        content: '.'
+    }
 }

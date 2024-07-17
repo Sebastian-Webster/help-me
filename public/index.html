@@ -68,6 +68,18 @@
     </template>
     
     <main><h1 style="text-align: center;">Loading...</h1></main>
+
+    <div class="hidden cover-screen centred-column-list" id="disconnected-screen">
+        <h1>Lost connection to the server.</h1>
+        <h3>Reconnecting<span class="animated-ellipsis"></span></h3>
+    </div>
+
+    <div class="hidden cover-screen centred-column-list" id="incorrect-protocol-version">
+        <h1>The server has been updated since you last opened this page.</h1>
+        <h3>This page only supports protocol version <span id="supported-protocol-version"></span> but the server is now using version <span id="server-protocol-version"></span></h3>
+        <h3>Please refresh the page to get the latest version.</h3>
+    </div>
+    
 </body>
 <script type="module" src="client.js"></script>
 </html>

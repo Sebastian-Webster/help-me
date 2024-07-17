@@ -105,6 +105,10 @@ io.on('connection', socket => {
             sendAllClientsUpdatedState()
         }
     })
+
+    socket.on('request protocol version', (callback) => {
+        callback(serverState.protocolVersion)
+    })
 })
 
 app.use(express.static('public'))
