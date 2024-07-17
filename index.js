@@ -12,6 +12,26 @@ const serverState = {
     helpQueue: []
 }
 
+function getClientState() {
+    const {connections, ...clientState} = serverState;
+    const trainers = Object.values(connections).filter(con => con.role === 'trainer').map(trainer => {
+        const clone = {...trainer}
+        delete clone.socket
+        return clone
+    })
+    clientState.trainers = trainers;
+    console.log('Client State:', clientState)
+    return clientState
+}
+
+function sendAllClientsUpdatedState() {
+    const registeredClients = Object.values(serverState.connections).filter(con => con.role && con.name).map(con => con.socket)
+    const state = getClientState();
+    for (const sock of registeredClients) {
+        sock.emit('update client state', state)
+    }
+}
+
 io.on('connection', socket => {
     console.log('Somebody connected to the socket')
     serverState.connections[socket.id] = {socket}
@@ -20,6 +40,7 @@ io.on('connection', socket => {
         const name = serverState.connections[socket.id].name
         delete serverState.connections[socket.id]
         serverState.helpQueue = serverState.helpQueue.filter(item => item === name)
+        console.log(`${name || 'A user that has not set their name yet'} disconnected`)
     })
 
     socket.on('entered name and role', (userData => {
@@ -35,7 +56,7 @@ io.on('connection', socket => {
             ...userData
         }
 
-        socket.emit('auth success', userData)
+        sendAllClientsUpdatedState()
     }))
 
     socket.on('need help', () => {
@@ -63,6 +84,25 @@ io.on('connection', socket => {
         const user = serverState.connections[socket.id]
         if (user.role === 'trainer') {
             user.break = false;
+        }
+    })
+
+    socket.on('start meeting', () => {
+        const user = serverState.connections[socket.id]
+        if (user.role === 'trainer') {
+            serverState.meetingStarted = true;
+            console.log(`${user.name} started the meeting`)
+            sendAllClientsUpdatedState()
+        }
+    })
+
+    socket.on('end meeting', () => {
+        const user = serverState.connections[socket.id]
+        if (user.role === 'trainer') {
+            serverState.meetingStarted = false;
+            serverState.helpQueue = [];
+            console.log(`${user.name} ended the meeting`)
+            sendAllClientsUpdatedState()
         }
     })
 })

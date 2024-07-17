@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="fontawesome.min.css">
 </head>
 <body>
+    <noscript>
+        <h1>Please enable JavaScript for this webpage to work</h1>
+    </noscript>
+
     <template id="error-getting-socket-code-template">
         <div class="full-screen centred-column-list" style="background-color: red;">
             <h1>An error occurred while getting socket.io code. Possibly a connection to the server could not be made?</h1>
@@ -32,14 +36,35 @@
 
     <template id="enter-name-template">
         <div class="full-screen centred-column-list">
+            <div class="error-alert hidden" id="name-error">Someone already has joined with that name! Please choose a unique name</div>
             <h1>What is your name?</h1>
             <form onsubmit="setName(event)">
                 <label for="name">Name:</label>
-                <input type="text" placeholder="John Smith" name="name" id="name">
+                <input type="text" placeholder="John Smith" name="name" id="name" autofocus>
                 <br>
                 <input type="submit">
             </form>
         </div>
+    </template>
+
+    <template id="meeting-not-started-template">
+        <div class="full-screen centred-column-list">
+            <h1>This meeting has not started yet.</h1>
+            <div id="meeting-not-started-secondary-item"></div>
+        </div>
+    </template>
+
+    <template id="student-top-bar-template">
+        <h1>Student Top Bar</h1>
+    </template>
+
+    <template id="trainer-top-bar-template">
+        <h1>Trainer Top Bar</h1>
+        <button onclick="endMeeting()">End Meeting</button>
+    </template>
+
+    <template id="main-app-template">
+        <section id="top-bar"></section>
     </template>
     
     <main><h1 style="text-align: center;">Loading...</h1></main>
