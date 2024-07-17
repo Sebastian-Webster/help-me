@@ -36,7 +36,7 @@
 
     <template id="enter-name-template">
         <div class="full-screen centred-column-list">
-            <div class="error-alert hidden" id="name-error">Someone already has joined with that name! Please choose a unique name</div>
+            <div class="error-alert hidden" id="name-error"></div>
             <h1>What is your name?</h1>
             <form onsubmit="setName(event)">
                 <label for="name">Name:</label>
@@ -79,7 +79,7 @@
         <h3>This page only supports protocol version <span id="supported-protocol-version"></span> but the server is now using version <span id="server-protocol-version"></span></h3>
         <h3>Please refresh the page to get the latest version.</h3>
     </div>
-    
+
 </body>
 <script type="module" src="client.js"></script>
 </html>

@@ -1,3 +1,9 @@
+let disconnected = false;
+let needingHelp = false;
+let role;
+let name;
+let currentScreen;
+
 try {
     await import('/socket.io/socket.io.js')
     changeScreenContent('welcome-screen')
@@ -8,8 +14,6 @@ try {
 
 const socket = io()
 const protocolVersion = 1;
-let disconnected = false;
-let currentScreen;
 
 socket.on('disconnect', () => {
     handleInvalidConnection()
@@ -23,25 +27,22 @@ socket.on('connect', () => {
     if (disconnected) {
         disconnected = false
         socket.emit('request protocol version', (response) => {
-            if (response === protocolVersion) {
-                document.getElementById('disconnected-screen').classList.add('hidden')
-            } else {
+            if (response !== protocolVersion) {
                 handleInvalidProtocolVersion(response)
+                return
             }
+            
+            socket.emit('authenticate', {name, role, needingHelp, reauthenticating: true}, (error) => {
+                document.getElementById('disconnected-screen').classList.add('hidden')
+                handleAuthentication(error)
+            })
         })
     }
-})
-
-socket.on('name error', () => {
-    document.getElementById('name-error').classList.remove('hidden')
 })
 
 socket.on('update client state', (state) => {
     handleClientStateChange(state)
 })
-
-let role;
-let name;
 
 function changeScreenContent(screen) {
     if (screen !== currentScreen) {
@@ -100,7 +101,20 @@ function setName(e) {
     e.preventDefault();
     name = e.target.name.value
     console.log(role, name)
-    socket.emit('entered name and role', {name, role})
+    socket.emit('authenticate', {name, role, needingHelp}, handleAuthentication)
+}
+
+function handleAuthentication(error) {
+    if (error) {
+        console.error(error)
+        changeScreenContent('enter-name')
+        const errorText = document.getElementById('name-error')
+        errorText.classList.remove('hidden')
+        errorText.textContent = error
+        return
+    }
+
+    changeScreenContent('main-app')
 }
 
 function startMeeting() {

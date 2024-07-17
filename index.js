@@ -43,11 +43,17 @@ io.on('connection', socket => {
         console.log(`${name || 'A user that has not set their name yet'} disconnected`)
     })
 
-    socket.on('entered name and role', (userData => {
+    socket.on('authenticate', ((data, callback) => {
+        const {needingHelp, reauthenticating, ...userData} = data;
+        console.log(serverState.connections)
         const nameIndex = Object.values(serverState.connections).findIndex(user => user.name === userData.name)
 
         if (nameIndex !== -1) {
-            socket.emit('name error')
+            if (reauthenticating) {
+                callback(`You got disconnected from the server and while you were disconnected someone used your name, ${userData.name}. Please pick a new name.`)
+            } else {
+                callback(`Someone already has set their name to ${userData.name}. Please use a different name.`)
+            }
             return
         }
 
@@ -55,6 +61,12 @@ io.on('connection', socket => {
             ...serverState.connections[socket.id],
             ...userData
         }
+
+        if (needingHelp) {
+            serverState.helpQueue.push(userData.name)
+        }
+
+        callback()
 
         sendAllClientsUpdatedState()
     }))
