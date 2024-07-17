@@ -9,6 +9,7 @@ try {
 const socket = io()
 const protocolVersion = 1;
 let disconnected = false;
+let currentScreen;
 
 socket.on('disconnect', () => {
     handleInvalidConnection()
@@ -43,18 +44,22 @@ let role;
 let name;
 
 function changeScreenContent(screen) {
-    const id = `${screen}-template`
-    const main = document.querySelector('main')
-    main.innerHTML = ''
-    main.appendChild(document.getElementById(id).content.cloneNode(true))
+    if (screen !== currentScreen) {
+        currentScreen = screen;
 
-    if (screen === 'main-app') {
-        if (role === 'trainer') {
-            const trainerTopBar = document.getElementById('trainer-top-bar-template').content.cloneNode(true)
-            document.getElementById('top-bar').appendChild(trainerTopBar)
-        } else if (role === 'student') {
-            const studentTopBar = document.getElementById('student-top-bar-template').content.cloneNode(true)
-            document.getElementById('top-bar').appendChild(studentTopBar)
+        const id = `${screen}-template`
+        const main = document.querySelector('main')
+        main.innerHTML = ''
+        main.appendChild(document.getElementById(id).content.cloneNode(true))
+    
+        if (screen === 'main-app') {
+            if (role === 'trainer') {
+                const trainerTopBar = document.getElementById('trainer-top-bar-template').content.cloneNode(true)
+                document.getElementById('top-bar').appendChild(trainerTopBar)
+            } else if (role === 'student') {
+                const studentTopBar = document.getElementById('student-top-bar-template').content.cloneNode(true)
+                document.getElementById('top-bar').appendChild(studentTopBar)
+            }
         }
     }
 }
